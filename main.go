@@ -17,15 +17,17 @@ type Dew struct {
 var dews []Dew
 
 func GetDew(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(dews)
+	return
 }
 
 func CreateDew(w http.ResponseWriter, r *http.Request) {
 	var dew Dew
-	_ = json.NewDecoder(r.Body).Decode(&dew)
+	json.NewDecoder(r.Body).Decode(&dew)
 	dews = append(dews, dew)
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(dews)
-
 }
 
 func main() {
