@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -40,13 +41,25 @@ func CreateDew(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(dew)
 }
 
+func PostDew(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Welcome to my Homme Route")
+}
+
+func GetPort() string {
+	var port = os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		fmt.Println("No port founf " + port)
+	}
+	return ":" + port
+}
+
 func main() {
 	router := mux.NewRouter()
 
-	PORT := os.Getenv("PORT")
-
+	router.HandleFunc("/home", PostDew)
 	router.HandleFunc("/dews", GetDew).Methods("GET")
 	router.HandleFunc("/dew", CreateDew).Methods("POST")
 	log.Println("Listening on Port: 7070")
-	http.ListenAndServe(":"+PORT, router)
+	http.ListenAndServe(GetPort(), router)
 }
